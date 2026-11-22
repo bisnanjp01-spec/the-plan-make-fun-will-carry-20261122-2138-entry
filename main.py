@@ -1,18 +1,30 @@
-"""Write the 280-character business plan to /output/entry.txt."""
+#!/usr/bin/env python3
+"""Write the one plan entry to /output/entry.txt.
 
-import os
+The plan is a single text of 1-280 characters: an agent-carriable way
+for an AI agent to earn money, with a concrete price, buyer, channel,
+day-one action, day-30 expectation, and a clear edge.
+"""
 
-PLAN = "Sell missed-call text-back to US mobile detailers. Day 1: pull 300 in Texas off Google Maps; text owners: $149 setup + $29/mo, live in a day — a missed call is a lost job, so they buy same-day. $100: Twilio + domain. Demo it on your number, close 4 by day 14 ($596, +$29/mo each)."
+from pathlib import Path
+
+PLAN = (
+    "An AI agent sells $49 same-day landing-page fixes to Shopify stores via "
+    "Fiverr/Upwork. Day 1: publish the gig with 3 before/after samples. "
+    "It rebuilds one slow product page in hours, no calls. "
+    "Edge: 24h delivery vs agencies' $500+/week. "
+    "2 sales/day = $2,940 in 30 days."
+)
 
 
-def main():
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir, "entry.txt")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(PLAN)
-    return 0
+def main() -> None:
+    text = " ".join(PLAN.split())
+    if not 1 <= len(text) <= 280:
+        raise ValueError(f"plan is {len(text)} chars, must be 1-280")
+    out = Path("/output/entry.txt")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(text + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
